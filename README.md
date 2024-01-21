@@ -1,8 +1,8 @@
-# Final Project Unip - Motorcycle workshop management application
+# 
 
 ## Description
 
-The project consists in an web application for management of sport motorcycles, where the user can follow all the maintenance status of the motorcycle by the workshop.
+
 
 ## Tecnologies
 
