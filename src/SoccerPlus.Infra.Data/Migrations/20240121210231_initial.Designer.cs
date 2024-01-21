@@ -12,7 +12,7 @@ using SoccerPlus.Infra.Data;
 namespace SoccerPlus.Infra.Data.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240121180228_initial")]
+    [Migration("20240121210231_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -286,11 +286,13 @@ namespace SoccerPlus.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<double>("Latitude")
-                        .HasColumnType("float");
+                    b.Property<string>("Latitude")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<double>("Longitude")
-                        .HasColumnType("float");
+                    b.Property<string>("Longitude")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("MatchDay")
                         .HasColumnType("date");

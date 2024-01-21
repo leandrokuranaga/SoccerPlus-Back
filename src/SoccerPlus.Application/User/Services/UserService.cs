@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SoccerPlus.Application.Common;
 using SoccerPlus.Application.User.Model.Request;
 using SoccerPlus.Application.User.Model.Response;
 using SoccerPlus.Application.User.Services;
+using SoccerPlus.Domain.SeedWork.Notification;
 using SoccerPlus.Infra.Http.Authentication;
 using SoccerPlus.Infra.Http.Authentication.Request;
 using System.Security.Cryptography;
 using System.Text;
 
-public class UserService : IUserService
+public class UserService : BaseService, IUserService
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
@@ -18,8 +20,10 @@ public class UserService : IUserService
         IPasswordHasher<IdentityUser> passwordHasher,
         IAuthenticateService authenticationService,
         SignInManager<IdentityUser> signInManager,
-        UserManager<IdentityUser> userManager
-        )
+        UserManager<IdentityUser> userManager,
+        INotification notification
+        ) : base(notification)
+        
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -43,8 +47,10 @@ public class UserService : IUserService
     public async Task<UserCreatedResponse> RegisterAsync(UserRequest request)
     {
         var passwordHash = _passwordHasher.HashPassword(null, request.Password);
-        IdentityResult created = new IdentityResult();
-        UserCreatedResponse createdResponse = new UserCreatedResponse();
+        IdentityResult created = new();
+        IdentityUser userList = new();
+        UserCreatedResponse createdUser = new();
+
 
         var user = new IdentityUser
         {
@@ -58,12 +64,13 @@ public class UserService : IUserService
         try
         {
             created = await _userManager.CreateAsync(user);
+
             if (created.Succeeded)
             {
-                createdResponse.Login = user.UserName;
-                createdResponse.Password = passwordHash;
+                userList = _userManager.Users.Where(x => x.UserName == request.Username).FirstOrDefault();
 
-                await _signInManager.SignInAsync(user, false);
+                createdUser.Username = userList.UserName;
+                createdUser.Id = userList.Id;
             }
 
         }
@@ -72,7 +79,7 @@ public class UserService : IUserService
             throw;
         }
 
-        return createdResponse;
+        return createdUser;
     }
     private string HashPassword(string password)
     {

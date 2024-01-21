@@ -59,8 +59,8 @@ namespace SoccerPlus.Infra.Data.Migrations
                     Address = table.Column<string>(type: "varchar(100)", nullable: false),
                     City = table.Column<string>(type: "varchar(50)", nullable: false),
                     UF = table.Column<string>(type: "varchar(2)", nullable: false),
-                    Latitude = table.Column<double>(type: "float", nullable: false),
-                    Longitude = table.Column<double>(type: "float", nullable: false),
+                    Latitude = table.Column<string>(type: "varchar(100)", nullable: false),
+                    Longitude = table.Column<string>(type: "varchar(100)", nullable: false),
                     MatchDay = table.Column<DateTime>(type: "date", nullable: false)
                 },
                 constraints: table =>

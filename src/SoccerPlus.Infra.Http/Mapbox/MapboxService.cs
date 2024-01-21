@@ -1,6 +1,4 @@
-﻿
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using SoccerPlus.Infra.Utils.Configurations;
 
@@ -22,24 +20,24 @@ public class MapboxService : BaseHttpService, IMapboxService
 
     public async Task<double> GetDistance(string lati, string longi, string lat, string lon)
     {
-        var response = await _httpClient.GetAsync($"https://api.mapbox.com/directions/v5/mapbox/driving/{longi}%2C{lati}%3B{lon}%2C{lat}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token={_appSettings.MapboxApiKey}").ConfigureAwait(false);
-        if (response.IsSuccessStatusCode)
-        {
-            var content = await response.Content.ReadAsStringAsync(); 
-            var data = JObject.Parse(content); 
+        double roundedDistance = 0;
+        try {
+            var response = await _httpClient.GetAsync($"https://api.mapbox.com/directions/v5/mapbox/driving/{longi}%2C{lati}%3B{lon}%2C{lat}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token={_appSettings.MapboxApiKey}").ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var data = JObject.Parse(content);
 
-            var distance = data["routes"][0]["distance"].Value<double>() / 1000;
-            var roundedDistance = Math.Round(distance, 1); // Arredonda para uma casa decimal
-
-
-            return roundedDistance;
+                var distance = data["routes"][0]["distance"].Value<double>() / 1000;
+                roundedDistance = Math.Round(distance, 1); 
+            }
         }
-        else
+        catch (Exception e)
         {
-
-            Console.WriteLine($"Erro ao obter a distância: {response.StatusCode}");
-            return -1; 
+            throw;
         }
+
+        return roundedDistance;
     }
 }
 

@@ -1,12 +1,14 @@
-﻿using SoccerPlus.Application.Player.Models.Request;
+﻿using SoccerPlus.Application.Common;
+using SoccerPlus.Application.Player.Models.Request;
 using SoccerPlus.Domain.PlayerAggregate;
+using SoccerPlus.Domain.SeedWork.Notification;
 using SoccerPlus.Domain.SoccerMatchAggregate;
 using SoccerPlus.Infra.Http.Mapbox;
 
 
 namespace SoccerPlus.Application.Player.Services
 {
-    public class PlayerServices : IPlayerServices
+    public class PlayerServices : BaseService, IPlayerServices
     {
         private readonly IPlayerRepository _playerRepository;
         private readonly ISoccerMatchRepository _soccerMatchRepository;
@@ -15,8 +17,10 @@ namespace SoccerPlus.Application.Player.Services
         public PlayerServices(
             IPlayerRepository playerRepository,
             ISoccerMatchRepository soccerMatchRepository,
-            IMapboxService mapboxService
-            )
+            IMapboxService mapboxService,
+            INotification notification
+
+            ) : base(notification)
         {
             _playerRepository = playerRepository;
             _soccerMatchRepository = soccerMatchRepository;
@@ -36,8 +40,11 @@ namespace SoccerPlus.Application.Player.Services
             var longtest = "-23.094522";
                 var lattest = "-47.210527";
 
+            request.Longitude = log;
+            request.Latitude = lat;
 
-            var retorno = await _mapboxService.GetDistance(log, lat, longtest, lattest);
+
+            var retorno = await _mapboxService.GetDistance(request.Longitude, request.Latitude, longtest, lattest);
 
             return retorno;
 

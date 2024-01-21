@@ -2,14 +2,25 @@
 using Microsoft.AspNetCore.Mvc;
 using SoccerPlus.Application.SoccerMatch.Models.Request;
 using SoccerPlus.Application.SoccerMatch.Models.Response;
+using SoccerPlus.Application.SoccerMatch.Services;
+using SoccerPlus.Domain.SeedWork.Notification;
 
 namespace SoccerPlus.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class SoccerMatchController : ControllerBase
+    public class SoccerMatchController : BaseController
     {
+        private readonly ISoccerMatchServices _soccerMatchServices;
+
+        public SoccerMatchController(
+            ISoccerMatchServices soccerMatchServices,
+            INotification notification
+            ) : base(notification)
+        {
+            _soccerMatchServices = soccerMatchServices;
+        }
 
         [HttpGet("findMatch")]
         public async Task<ActionResult<SoccerMatchResponse>> FindMatch([FromQuery] SoccerMatchRequest soccerMatch)

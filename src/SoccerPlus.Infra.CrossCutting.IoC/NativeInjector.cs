@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using SoccerPlus.Application.Player.Services;
 using SoccerPlus.Application.User.Services;
 using SoccerPlus.Domain.PlayerAggregate;
+using SoccerPlus.Domain.SeedWork.Notification;
 using SoccerPlus.Domain.SoccerMatchAggregate;
 using SoccerPlus.Infra.Data.Repositories;
 using SoccerPlus.Infra.Http.Authentication;
@@ -20,7 +21,7 @@ namespace SoccerPlus.Infra.CrossCutting.IoC;
 
 public static class NativeInjector
 {
-    public static void ResolveAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static void AddAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var appSettings = configuration.GetSection("App:Settings").Get<TokenSettings>();
 
@@ -99,12 +100,13 @@ public static class NativeInjector
         services.AddScoped<ISoccerMatchRepository, SoccerMatchRepository>();
 
         #endregion
+
+
+        #region Services
+        services.AddScoped<INotification, Notification>();
         services.AddScoped<IPlayerServices, PlayerServices>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IUserService, UserService>();
-
-        #region Services
-
 
         #endregion
     }

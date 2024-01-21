@@ -1,18 +1,21 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SoccerPlus.Application.Player.Models.Request;
 using SoccerPlus.Application.Player.Models.Response;
 using SoccerPlus.Application.Player.Services;
+using SoccerPlus.Domain.SeedWork.Notification;
 
 namespace SoccerPlus.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PlayerController : ControllerBase
+    public class PlayerController : BaseController
     {
         private readonly IPlayerServices _playerServices;
 
-        public PlayerController(IPlayerServices playerServices)
+        public PlayerController(
+            IPlayerServices playerServices,
+            INotification notification
+            ) : base(notification)
         {
             _playerServices = playerServices;
         }
@@ -42,10 +45,7 @@ namespace SoccerPlus.Api.Controllers
         }
 
         [HttpPost("find-match")]
-        public async Task<ActionResult<double>> FindMatchAsync(PlayerRequest request)
-        {
-            var distance = await _playerServices.FindMatchAsync(request);
-            return distance;
-        }
+        public async Task<IActionResult> FindMatchAsync(PlayerRequest request)
+            => Response(await _playerServices.FindMatchAsync(request).ConfigureAwait(false));
     }
 }

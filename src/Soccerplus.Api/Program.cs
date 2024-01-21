@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddLocalHttpClients(builder.Configuration);
 builder.Services.AddLocalServices(builder.Configuration);
-builder.Services.ResolveAuthentication(builder.Configuration);
+builder.Services.AddAuthentication(builder.Configuration);
 builder.Services.AddScoped<IPasswordHasher<IdentityUser>, PasswordHasher<IdentityUser>>();
 
 builder.Services.AddAuthorization(opt =>
