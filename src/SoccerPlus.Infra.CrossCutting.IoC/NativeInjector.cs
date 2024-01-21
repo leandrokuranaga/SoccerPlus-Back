@@ -31,13 +31,13 @@ public static class NativeInjector
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = appSettings.Issuer,
+                        ValidIssuer = appSettings?.Issuer,
                         ValidateAudience = true,
-                        ValidAudience = appSettings.Audience,
+                        ValidAudience = appSettings?.Audience,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
-    Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
+                        Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
                     };
                 });
 

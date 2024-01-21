@@ -44,9 +44,9 @@ namespace SoccerPlus.Application.Player.Services
             request.Latitude = lat;
 
 
-            var retorno = await _mapboxService.GetDistance(request.Longitude, request.Latitude, longtest, lattest);
+            var response = await _mapboxService.GetDistance(request.Longitude, request.Latitude, longtest, lattest);
 
-            return retorno;
+            return response;
 
         }
 

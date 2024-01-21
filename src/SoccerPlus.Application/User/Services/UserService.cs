@@ -55,8 +55,8 @@ public class UserService : BaseService, IUserService
         var user = new IdentityUser
         {
             UserName = request.Username,
-            NormalizedUserName = request.Username.ToUpper(),
-            Email = request.Username,
+            NormalizedUserName = request.Username?.ToUpper(),
+            Email = request?.Username,
             EmailConfirmed = true,
             PasswordHash = passwordHash,
             
@@ -69,8 +69,8 @@ public class UserService : BaseService, IUserService
             {
                 userList = _userManager.Users.Where(x => x.UserName == request.Username).FirstOrDefault();
 
-                createdUser.Username = userList.UserName;
-                createdUser.Id = userList.Id;
+                createdUser.Username = userList?.UserName;
+                createdUser.Id = userList?.Id;
             }
 
         }

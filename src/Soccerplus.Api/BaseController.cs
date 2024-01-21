@@ -45,7 +45,7 @@ namespace SoccerPlus.Api
             return result;
         }
 
-        protected new IActionResult VerifyError(ENotificationType notificationType, BaseResponse response)
+        private IActionResult VerifyError(ENotificationType notificationType, BaseResponse response)
         {
             switch (notificationType)
                 {
